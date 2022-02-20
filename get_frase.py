@@ -1,9 +1,5 @@
-﻿import json
-import urllib.request as ureq
-import urllib.parse
-import random
-import sys
-import re
+﻿import urllib.request as ureq
+import sys, re, random, urllib.parse, json
 from bs4 import BeautifulSoup
 from http.cookiejar import CookieJar
 
