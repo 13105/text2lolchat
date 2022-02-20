@@ -54,13 +54,12 @@ def zip_zap(site):
     req.add_header('User-Agent', USER_AGENT)
     #isso só vai dar erro se der pau na conexão 
     ret = ureq.urlopen(req)
-    print("!")
+    
     #separa json do js
     str_ret = (ret.read())[29:-2]
     json_ret = json.loads(str_ret)
 
-    #isso aqui só muda se o ademir do site editar o arquivo
-    #print(json_ret["feed"]["entry"][0]["title"]["$t"], end='')
+    
 
 
     #Converte a frase para utf-8, atualmente ela é uma string unicode do python
