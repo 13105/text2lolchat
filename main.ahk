@@ -9,11 +9,23 @@
 global CHAT_LIMITE := (127 - 5)
 
 
-;#ifwinactive, ahk_exe League of Legends.exe
+#ifwinactive, ahk_exe League of Legends.exe
 
-;Delay entre cada (keydown, keyup)
-SetKeyDelay 40
 
+FileEncoding UTF-8
+
+
+;lê o arquivo de frases
+FileRead, Frases, C:\Users\B105\Documents\AHK\frases\superioridade.txt
+
+
+if not ErrorLevel {
+	arrFrasesFull := strSplit(Frases, "`n")
+	arrFrasesFull.removeat(0)
+	arrFrases := arrFrasesFull.clone()
+	Frases := ""
+	
+}
 
 
 ;Prepara a queue para a hotkey iterar sobre
@@ -55,14 +67,11 @@ preparar_queue(Byref arrTexto, ByRef queue){
 					
 					
 					; A frase aguenta mais palavras
-					;Trim por paranoia do texto não estar filtrado
-					frase := Trim(frase . " " . palavra)
 					
 					
 					if (palavra_i == PLI){	;Ultimo indice ?
 						
-						;coloca o ponto final, pusha e limpa conteudo
-						frase := frase . "."
+						;pusha e limpa conteudo
 						queue.push(frase)
 						frase := ""
 						
@@ -80,9 +89,8 @@ preparar_queue(Byref arrTexto, ByRef queue){
 		
 		else {
 			; Só chega aqui se a string cabe perfeitamente dentro do limite
-			; adiciona ponto final e pusha
 			
-			queue.push(x . ".")
+			queue.push(x)
 		}
 		
 			
@@ -108,10 +116,13 @@ escreverFrase(frase){
 	 
 	 
 	for i,p in queue {
-	
-		send, {shift}{enter}
-		send % p
-		send, {shift}{enter}
+		
+		Random, delay, 40, 60
+		SetKeyDelay delay
+		
+		send, {enter} 
+		send % "/all " . p
+		send, {enter}
 		
 	}
 }
@@ -140,23 +151,46 @@ return
 
 f3::
 	;ESCREVE DEFINIÇÃO DE UM ARTIGO SOBRE TATUS DA WIKIPEDIA
-	frase_random := gerarFrase(1, "Matemática")
+	;frase_random := gerarFrase(1, "Matemática")
 
 	
-	escreverFrase(frase_random)
+	;escreverFrase(frase_random)
 return
 
 f4::
 	;ESCREVE DEFINIÇÃO DE UM ARTIGO SOBRE O QUE ESTÁ ESCRITO NA ULTIMA LINHA DE MyNotes.txt
-	frase_random := gerarFrase(1)
-	escreverFrase(frase_random)
+	;frase_random := gerarFrase(1)
+	;escreverFrase(frase_random)
+	
+	
+return
+
+
+
+f1::
+	; frase irritante de superioridade
+	
+	
+	mi := arrFrases.MaxIndex() 
+	if (mi < 1){
+		; acabou a lista, recopia as frasses
+		arrFrases := arrFrasesFull.clone()
+		mi := arrFrases.MaxIndex() 
+		
+	}
+	
+	
+	
+	
+	Random, randi, 0, mi
+	escreverFrase(arrFrases[randi])
+	arrFrases.removeat(randi)
+	
 	
 	
 return
 
 f5::
-MsgBox, Teste
-f1::
 Reload
 
 
